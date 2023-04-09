@@ -18,6 +18,9 @@ class Channel:
         self.__channel_id = channel_id
         self.get_attributes()
 
+    def __str__(self):
+        return f'{self.title} ({self.url})'
+
     @property
     def channel_id(self):
         """
@@ -51,9 +54,9 @@ class Channel:
         self.title = py_dict_data['items'][0]['snippet']['title']
         self.description = py_dict_data['items'][0]['snippet']['description']
         self.url = py_dict_data['items'][0]['snippet']['thumbnails']['default']['url']
-        self.subscriberCount = py_dict_data['items'][0]['statistics']['subscriberCount']
-        self.video_count = py_dict_data['items'][0]['statistics']['videoCount']
-        self.viewCount = py_dict_data['items'][0]['statistics']['viewCount']
+        self.subscriberCount = int(py_dict_data['items'][0]['statistics']['subscriberCount'])
+        self.video_count = int(py_dict_data['items'][0]['statistics']['videoCount'])
+        self.viewCount = int(py_dict_data['items'][0]['statistics']['viewCount'])
 
         return self.__channel_id, self.title, self.description, self.url, self.subscriberCount, self.video_count, self.viewCount
 
@@ -63,6 +66,69 @@ class Channel:
         """
         with open(file_name, 'w') as file:
             json.dump(self.get_attributes(), file)
+
+    def __add__(self, other) -> int:
+        """
+        Метод складывает количество подписчиков.
+        """
+        if isinstance(other, Channel):
+            return self.subscriberCount + other.subscriberCount
+        else:
+            raise TypeError
+
+    def __sub__(self, other) -> int:
+        """
+        Метод вычитает из количества подписчиков self количество подписчиков other.
+        """
+        if isinstance(other, Channel):
+            return self.subscriberCount - other.subscriberCount
+        else:
+            raise TypeError
+
+    def __gt__(self, other) -> bool:
+        """
+        Метод сравнивает количество подписчиков с помощью оператора ">"
+        """
+        if isinstance(other, Channel):
+            return self.subscriberCount > other.subscriberCount
+        else:
+            raise TypeError
+
+    def __ge__(self, other) -> bool:
+        """
+        Метод сравнивает количество подписчиков с помощью оператора ">="
+        """
+        if isinstance(other, Channel):
+            return self.subscriberCount >= other.subscriberCount
+        else:
+            raise TypeError
+
+    def __lt__(self, other) -> bool:
+        """
+        Метод сравнивает количество подписчиков с помощью оператора "<"
+        """
+        if isinstance(other, Channel):
+            return self.subscriberCount < other.subscriberCount
+        else:
+            raise TypeError
+
+    def __le__(self, other) -> bool:
+        """
+        Метод сравнивает количество подписчиков с помощью оператора "<="
+        """
+        if isinstance(other, Channel):
+            return self.subscriberCount <= other.subscriberCount
+        else:
+            raise TypeError
+
+    def __eq__(self, other) -> bool:
+        """
+        Метод сравнивает количество подписчиков с помощью оператора "=="
+        """
+        if isinstance(other, Channel):
+            return self.subscriberCount <= other.subscriberCount
+        else:
+            raise TypeError
 
 # id канала                        channel_id          id
 # название канала                  title               title
